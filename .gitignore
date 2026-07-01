@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Dados grandes
+data/**/*.csv
+data/**/*.parquet
+data/**/*.jsonl
+data/**/*.xlsx
+
+# Manter estrutura das pastas
+!data/**/.gitkeep
+!logs/.gitkeep
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Credenciais
+*.json
+.env
