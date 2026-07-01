@@ -324,4 +324,4 @@ ON
   m.ano = mm.ano
   AND m.id_municipio = mm.id_municipio
   AND m.rede = mm.rede
-LIMIT 100;
+LIMIT 100;e
