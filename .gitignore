@@ -30,3 +30,16 @@ Thumbs.db
 # Credenciais
 *.json
 .env
+
+# Dados e evidências gerados em execução
+data/**/*.csv
+data/**/*.parquet
+data/**/*.jsonl
+data/**/*.json
+data/evidence/
+data/quality/
+data/monitoring/
+
+# Logs
+*.log
+logs/*.log
