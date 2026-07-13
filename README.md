@@ -1,435 +1,423 @@
-# TechChallenge Fase 2 - Pipeline Híbrido para Análise da Alfabetização no Brasil
+# TechChallenge Fase 2 — Pipeline Híbrido para Análise da Alfabetização no Brasil
 
-Projeto desenvolvido para o **Tech Challenge - Fase 2**, da **FIAP**, turma **1IAST**, com o objetivo de construir uma pipeline híbrida de dados para análise da alfabetização no Brasil.
+## 1. Contexto
 
-## Integrante
+Este projeto foi desenvolvido para o **TechChallenge Fase 2 — FIAP**, com o objetivo de construir uma pipeline híbrida de dados para análise da alfabetização no Brasil.
 
-* Andre Correa Luis Vilas Boas
+O desafio está relacionado ao acompanhamento do **Indicador Criança Alfabetizada**, dentro do contexto do Compromisso Nacional Criança Alfabetizada. A solução busca integrar dados públicos educacionais, estruturar uma arquitetura em camadas e disponibilizar bases analíticas para apoiar decisões públicas, análise de desempenho educacional e futuras aplicações de Inteligência Artificial.
 
----
+## 2. Objetivo do Projeto
 
-## 1. Contexto do problema
+Construir uma pipeline híbrida, com processamento **Batch** e **Streaming simulado**, utilizando ambiente cloud gratuito, arquitetura Medalhão e dados públicos da Base dos Dados.
 
-A alfabetização na infância é um dos principais indicadores de desenvolvimento educacional, social e econômico de um país. No Brasil, políticas públicas como o **Compromisso Nacional Criança Alfabetizada** buscam garantir que todas as crianças estejam alfabetizadas até o final do 2º ano do ensino fundamental.
+A solução contempla:
 
-Para apoiar esse tipo de análise, é necessário integrar diferentes fontes de dados educacionais, territoriais e de desempenho. Esses dados permitem identificar desigualdades regionais, acompanhar metas nacionais, estaduais e municipais, além de apoiar a formulação de políticas públicas baseadas em evidências.
+- ingestão Batch de dados públicos educacionais;
+- simulação de eventos em tempo quase real;
+- organização em camadas Bronze, Silver e Gold;
+- validação de qualidade de dados;
+- geração de bases analíticas;
+- monitoramento consolidado;
+- estratégia FinOps;
+- preparação de base para uso futuro em IA.
 
-Este projeto propõe uma pipeline de dados híbrida, combinando ingestão **Batch** e simulação de ingestão **Streaming**, organizada segundo a arquitetura **Medalhão**, com camadas **Bronze**, **Silver** e **Gold**.
+## 3. Autor
 
----
+- **Andre Correa Luis Vilas Boas**
+- Instituição: **FIAP**
+- Turma: **1IAST**
+- Repositório: `acorrea79/techchallenge-fase2-pipeline-alfabetizacao`
 
-## 2. Objetivo do projeto
+## 4. Tecnologias Utilizadas
 
-Construir uma pipeline de dados escalável e organizada para ingestão, tratamento, validação e disponibilização analítica de dados relacionados à alfabetização no Brasil.
+| Categoria | Tecnologia |
+|---|---|
+| Cloud | Google Cloud BigQuery Sandbox |
+| Execução | Google Colab |
+| Linguagem | Python |
+| Manipulação de dados | Pandas, NumPy |
+| Formato Bronze | CSV e JSONL |
+| Formato Silver/Gold | Parquet |
+| Streaming | Simulação Python em micro-batches |
+| Qualidade | Validações customizadas em Python |
+| Monitoramento | Logs, manifestos e relatórios consolidados |
+| Versionamento | Git e GitHub |
+| Documentação | Markdown e Mermaid |
 
-A solução tem como objetivos principais:
+## 5. Fonte dos Dados
 
-* realizar ingestão batch de dados públicos educacionais;
-* simular ingestão streaming de atualizações de indicadores;
-* organizar os dados nas camadas Bronze, Silver e Gold;
-* aplicar regras de qualidade de dados;
-* gerar bases analíticas confiáveis;
-* documentar decisões arquiteturais;
-* considerar práticas de monitoramento e FinOps;
-* demonstrar como a camada Gold pode apoiar análises educacionais e aplicações futuras de IA.
+A pipeline utiliza dados públicos da **Base dos Dados**, disponíveis via BigQuery público:
 
----
+```text
+basedosdados.br_inep_avaliacao_alfabetizacao
+```
 
-## 3. Abordagem de custo zero
+Tabelas utilizadas:
 
-Considerando a restrição acadêmica de custo zero, a solução foi desenhada utilizando recursos gratuitos e sem ativação de billing.
+| Tabela | Finalidade |
+|---|---|
+| `alunos` | Dados de alunos e proficiência |
+| `dicionario` | Dicionário dos campos |
+| `meta_alfabetizacao_brasil` | Metas nacionais |
+| `meta_alfabetizacao_uf` | Metas por UF |
+| `meta_alfabetizacao_municipio` | Metas por município |
+| `municipio` | Indicadores por município |
+| `uf` | Indicadores por UF |
 
-O componente cloud principal será o **GCP BigQuery Sandbox**, utilizado para consulta e exploração dos dados públicos. A execução dos pipelines será feita em **Google Colab**, utilizando Python.
-
-A solução evita o uso de serviços pagos ou que exigem conta de faturamento ativa, como Pub/Sub, Cloud Storage, Cloud Run, Dataflow ou Vertex AI.
-
-Apesar disso, a arquitetura lógica foi desenhada de forma compatível com uma futura migração para serviços gerenciados do GCP.
-
----
-
-## 4. Arquitetura proposta
-
-A arquitetura do projeto combina:
-
-* **BigQuery Sandbox** como componente cloud para acesso aos dados públicos;
-* **Google Colab** como ambiente gratuito de execução;
-* **Python** para ingestão, transformação, validação e simulação de streaming;
-* **Arquitetura Medalhão** para organização dos dados;
-* **GitHub** para versionamento, documentação e evidência de evolução do projeto.
-
-### Diagrama da pipeline
+## 6. Arquitetura Geral
 
 ```mermaid
 flowchart TD
-    A[Base dos Dados / BigQuery Sandbox] --> B[Ingestão Batch com Python]
-    B --> C[Bronze Layer - Dados Brutos]
-    C --> D[Silver Layer - Dados Tratados]
-    D --> E[Gold Layer - Dados Analíticos]
-    E --> F[Análises Educacionais]
-    E --> G[Aplicações Futuras de IA]
+    A[Base dos Dados / BigQuery Sandbox] --> B[Google Colab / Python]
 
-    H[Producer Python - Streaming Simulado] --> I[Eventos JSONL]
-    I --> J[Consumer Python]
-    J --> K[Bronze Streaming]
-    K --> D
+    B --> C[Bronze Batch]
+    B --> D[Bronze Streaming]
+
+    C --> E[Silver]
+    D --> F[Silver Streaming]
+
+    E --> G[Gold]
+    F --> H[Gold Streaming]
+
+    G --> I[Qualidade de Dados]
+    H --> I
+
+    I --> J[Monitoramento Consolidado]
+    J --> K[Documentação / Evidências / FinOps]
+
+    G --> L[Base Analítica para IA]
 ```
 
----
+## 7. Arquitetura Medalhão
 
-## 5. Fluxo de dados
+### 7.1 Bronze
 
-### 5.1 Ingestão Batch
+A camada Bronze armazena os dados brutos ou minimamente controlados.
 
-A ingestão batch será responsável por coletar dados históricos relacionados ao indicador de alfabetização e às entidades obrigatórias do desafio.
-
-O fluxo batch seguirá a seguinte sequência:
-
-1. consulta dos dados na Base dos Dados via BigQuery Sandbox;
-2. extração dos dados para o ambiente Google Colab;
-3. gravação dos dados brutos na camada Bronze;
-4. transformação dos dados para a camada Silver;
-5. criação de bases analíticas na camada Gold.
-
-### 5.2 Ingestão Streaming Simulada
-
-Como a solução foi desenhada para operar sem custos, a ingestão streaming será simulada por scripts Python.
-
-O fluxo streaming seguirá a seguinte sequência:
-
-1. geração de eventos simulados em formato JSONL;
-2. leitura dos eventos por um consumer Python;
-3. gravação dos eventos na camada Bronze Streaming;
-4. tratamento e validação dos eventos;
-5. integração dos eventos processados às camadas Silver e Gold.
-
-Essa simulação representa cenários como atualização de indicadores, novas medições de desempenho ou revisão de metas educacionais.
-
----
-
-## 6. Arquitetura Medalhão
-
-A solução será organizada em três camadas principais.
-
-### 6.1 Bronze Layer
-
-A camada Bronze armazenará os dados brutos, preservando o conteúdo original da ingestão.
-
-Exemplos:
-
-* dados extraídos da Base dos Dados;
-* arquivos brutos da ingestão batch;
-* eventos JSONL da simulação streaming;
-* histórico de ingestão.
-
-Diretório previsto:
+Arquivos gerados:
 
 ```text
-data/bronze/
+data/bronze/batch/*.csv
+data/bronze/streaming/events/*.jsonl
+data/bronze/streaming/quarantine/*.jsonl
 ```
 
-### 6.2 Silver Layer
+Principais saídas Batch:
 
-A camada Silver armazenará os dados tratados, limpos e padronizados.
+- `meta_alfabetizacao_brasil.csv`
+- `meta_alfabetizacao_uf.csv`
+- `meta_alfabetizacao_municipio.csv`
+- `municipio.csv`
+- `uf.csv`
+- `dicionario.csv`
+- `alunos_sample.csv`
+- `alunos_agregado.csv`
 
-Transformações previstas:
+### 7.2 Silver
 
-* padronização de nomes de colunas;
-* conversão de tipos de dados;
-* tratamento de valores ausentes;
-* remoção ou identificação de duplicidades;
-* validação de chaves de relacionamento;
-* normalização de códigos de município e UF.
+A camada Silver trata, padroniza e valida os dados.
 
-Diretório previsto:
+Transformações aplicadas:
+
+- padronização de nomes de colunas;
+- normalização de chaves;
+- conversão de tipos;
+- remoção de duplicidades;
+- validação de campos obrigatórios;
+- validação de faixas percentuais;
+- salvamento em Parquet.
+
+Arquivos gerados:
 
 ```text
-data/silver/
+data/silver/*.parquet
 ```
 
-### 6.3 Gold Layer
+### 7.3 Gold
 
-A camada Gold armazenará bases analíticas prontas para consumo.
+A camada Gold entrega bases analíticas finais.
 
-Exemplos de datasets Gold:
+Datasets gerados:
 
-* indicador de alfabetização por município;
-* comparação entre metas e resultados;
-* evolução temporal do indicador;
-* ranking de municípios abaixo da meta;
-* visão consolidada por UF.
+| Dataset Gold | Objetivo |
+|---|---|
+| `gold_indicador_municipio.parquet` | Indicador municipal integrado |
+| `gold_comparativo_meta_resultado_municipio.parquet` | Comparativo meta x resultado |
+| `gold_ranking_municipios_prioritarios.parquet` | Ranking de municípios prioritários |
+| `gold_indicador_uf.parquet` | Indicador consolidado por UF |
+| `gold_evolucao_alfabetizacao_uf.parquet` | Evolução temporal por UF |
+| `gold_base_ia_alfabetizacao.parquet` | Base preparada para IA |
 
-Diretório previsto:
+## 8. Fluxo Batch
+
+```mermaid
+flowchart LR
+    A[BigQuery Público] --> B[Consulta Batch]
+    B --> C[Bronze CSV]
+    C --> D[Tratamento Silver]
+    D --> E[Silver Parquet]
+    E --> F[Integração Gold]
+    F --> G[Gold Parquet]
+```
+
+A ingestão Batch utiliza o BigQuery Sandbox para consultar os dados públicos e gerar arquivos locais reproduzíveis no Colab.
+
+A tabela `alunos`, por possuir maior volume, foi tratada com estratégia FinOps:
+
+- amostra controlada de 100.000 linhas;
+- visão agregada por ano, município, rede e série.
+
+## 9. Fluxo Streaming Simulado
+
+```mermaid
+flowchart LR
+    A[Producer Python] --> B[Eventos JSONL]
+    B --> C[Bronze Streaming]
+    C --> D[Consumer Micro-batch]
+    D --> E{Validação}
+    E -->|Válidos| F[Silver Streaming]
+    E -->|Inválidos| G[Quarentena]
+    F --> H[Gold Streaming]
+    H --> I[Monitoramento]
+```
+
+O streaming foi simulado com Python, JSONL e micro-batches para manter a restrição de custo zero.
+
+Eventos simulados:
+
+- atualização de indicador;
+- nova medição de desempenho;
+- atualização de meta ou resultado.
+
+Foram gerados eventos inválidos propositalmente para demonstrar:
+
+- validação;
+- rejeição;
+- quarentena;
+- monitoramento de eventos inválidos.
+
+## 10. Qualidade de Dados
+
+A pipeline executa validações consolidadas nas camadas Bronze, Silver, Gold e Streaming.
+
+Validações realizadas:
+
+- existência de arquivos obrigatórios;
+- datasets não vazios;
+- colunas obrigatórias;
+- campos obrigatórios não nulos;
+- duplicidades por chave de negócio;
+- faixas percentuais entre 0 e 100;
+- consistência de UF;
+- consistência do ranking Gold;
+- validação dos eventos de streaming;
+- reclassificação de alertas esperados.
+
+Resultado final da qualidade:
 
 ```text
-data/gold/
+executive_quality_status: approved_with_warnings
+failed_checks: 0
 ```
 
----
+Os warnings são controlados e documentados, incluindo valores nulos esperados em métricas informativas de origem e eventos inválidos simulados para demonstrar quarentena.
 
-## 7. Fontes de dados
+## 11. Monitoramento
 
-A fonte principal do projeto será a **Base dos Dados**, com foco no indicador relacionado à alfabetização no Brasil.
+A solução gera monitoramento consolidado com:
 
-As entidades previstas para integração são:
+- status por camada;
+- quantidade de componentes monitorados;
+- alertas críticos;
+- warnings;
+- métricas de streaming;
+- status da qualidade;
+- status FinOps;
+- logs de execução.
 
-* UF;
-* município;
-* meta de alfabetização nacional;
-* meta de alfabetização por UF;
-* meta de alfabetização por município;
-* dados educacionais relacionados aos alunos e indicadores de desempenho.
-
-Nesta primeira versão, o projeto prioriza as fontes obrigatórias do desafio. Fontes externas, como IBGE ou Censo Escolar, poderão ser consideradas em uma evolução futura.
-
----
-
-## 8. Tecnologias utilizadas
-
-| Tecnologia                   | Finalidade                                           |
-| ---------------------------- | ---------------------------------------------------- |
-| GCP BigQuery Sandbox         | Consulta cloud dos dados públicos                    |
-| Google Colab                 | Execução gratuita dos notebooks e scripts            |
-| Python                       | Linguagem principal da pipeline                      |
-| Pandas                       | Tratamento e transformação dos dados                 |
-| PyArrow                      | Manipulação de arquivos Parquet                      |
-| Google Cloud BigQuery Client | Integração Python com BigQuery                       |
-| CSV                          | Armazenamento inicial e conferência dos dados brutos |
-| Parquet                      | Armazenamento otimizado nas camadas tratadas         |
-| JSONL                        | Simulação de eventos streaming                       |
-| GitHub                       | Versionamento, documentação e evidência de evolução  |
-
----
-
-## 9. Qualidade de dados
-
-A pipeline incluirá validações para garantir maior confiabilidade dos dados processados.
-
-Regras previstas:
-
-* verificação de valores ausentes;
-* detecção de duplicidades;
-* validação de chaves de relacionamento;
-* consistência entre município e UF;
-* validação de tipos de dados;
-* validação de percentuais em faixas esperadas;
-* geração de relatório de qualidade.
-
-Exemplos de scripts previstos:
+Resultado final do monitoramento:
 
 ```text
-src/quality/validate_nulls.py
-src/quality/validate_duplicates.py
-src/quality/validate_relationships.py
-src/quality/generate_quality_report.py
+executive_monitoring_status: approved_with_warnings
+failed_components: 0
+critical_alerts: 0
 ```
 
----
+Os warnings são controlados e explicados na documentação.
 
-## 10. Monitoramento
+## 12. Estratégia FinOps
 
-O monitoramento será implementado de forma simples, por meio de logs gerados durante a execução da pipeline.
+A solução foi construída com a restrição de **custo zero**.
 
-Serão registrados:
+Decisões FinOps:
 
-* data e hora de início da execução;
-* data e hora de término;
-* quantidade de registros processados;
-* status da execução;
-* falhas encontradas;
-* tempo de processamento;
-* resultado das validações de qualidade.
+- uso do BigQuery Sandbox;
+- uso de Google Colab;
+- não ativação de billing;
+- controle da tabela `alunos`;
+- seleção explícita de colunas;
+- uso de amostra controlada;
+- uso de agregação para reduzir granularidade;
+- uso de Parquet em Silver e Gold;
+- dry run do BigQuery para estimar bytes processados;
+- streaming simulado em vez de Pub/Sub/Dataflow.
 
-Arquivos previstos:
+Documentos relacionados:
 
 ```text
-logs/pipeline_execution.log
-logs/quality_report.json
+docs/cloud_bigquery_evidence.md
+docs/finops_strategy.md
 ```
 
-Em uma arquitetura produtiva, esses logs poderiam ser enviados para ferramentas como Cloud Logging e Cloud Monitoring.
+## 13. Aplicação em Inteligência Artificial
 
----
+A camada Gold gera a base:
 
-## 11. FinOps
+```text
+gold_base_ia_alfabetizacao.parquet
+```
 
-A solução foi desenhada considerando boas práticas de FinOps e restrição de custo zero.
+Essa base pode apoiar aplicações futuras como:
 
-Decisões adotadas:
+- previsão de risco de baixa alfabetização;
+- classificação de municípios prioritários;
+- clusterização de municípios por perfil educacional;
+- recomendação de políticas públicas;
+- análise de evolução temporal;
+- identificação de padrões por UF, rede e município.
 
-* uso do BigQuery Sandbox sem ativação de billing;
-* execução em Google Colab;
-* ausência de serviços pagos na primeira versão;
-* uso de dados controlados para evitar consumo excessivo;
-* separação das camadas Bronze, Silver e Gold para evitar reprocessamentos desnecessários;
-* uso de Parquet nas camadas tratadas para otimizar armazenamento e leitura;
-* documentação de uma possível migração futura para serviços gerenciados do GCP.
-
-Em uma versão produtiva, a arquitetura poderia evoluir para:
-
-* Cloud Storage como Data Lake;
-* Pub/Sub para ingestão streaming real;
-* Dataflow ou Cloud Run para processamento;
-* BigQuery como camada analítica principal;
-* Cloud Monitoring para observabilidade.
-
----
-
-## 12. Decisões arquiteturais
-
-### 12.1 Batch vs Streaming
-
-O processamento batch será utilizado para dados históricos e cargas periódicas.
-
-A ingestão streaming será simulada para representar atualizações quase em tempo real, como novos indicadores, revisões de metas ou medições de desempenho.
-
-Essa combinação permite demonstrar uma arquitetura híbrida sem gerar custos adicionais.
-
-### 12.2 Data Lake vs Data Warehouse
-
-A estrutura local em pastas Bronze, Silver e Gold representa o conceito de Data Lake organizado.
-
-O BigQuery Sandbox será utilizado como componente cloud para consulta e exploração dos dados públicos.
-
-Em um ambiente produtivo, a camada Gold poderia ser disponibilizada em um Data Warehouse, como o BigQuery, para facilitar análises, dashboards e consumo por aplicações.
-
-### 12.3 Custo vs Performance
-
-Como o projeto possui restrição de custo zero, a arquitetura prioriza simplicidade, reprodutibilidade e controle de consumo.
-
-O uso de Parquet, separação de camadas e execução sob demanda ajuda a reduzir desperdício de processamento e armazenamento.
-
----
-
-## 13. Aplicação em IA
-
-A camada Gold poderá ser utilizada futuramente como base para aplicações de inteligência artificial e análise avançada.
-
-Possíveis aplicações:
-
-* predição do percentual de alfabetização por município;
-* identificação de municípios com maior risco de não atingir a meta;
-* análise de desigualdade educacional entre regiões;
-* agrupamento de municípios por perfil de desempenho;
-* priorização de políticas públicas;
-* identificação de padrões anômalos em indicadores educacionais.
-
-O objetivo desta entrega não é treinar um modelo de machine learning completo, mas preparar uma base analítica confiável para esse tipo de uso futuro.
-
----
-
-## 14. Estrutura do repositório
+## 14. Estrutura do Repositório
 
 ```text
 techchallenge-fase2-pipeline-alfabetizacao/
-│
-├── README.md
-├── requirements.txt
-├── .gitignore
-│
 ├── docs/
-│
+│   ├── cloud_bigquery_evidence.md
+│   ├── code_organization.md
+│   ├── finops_strategy.md
+│   └── monitoring_strategy.md
+├── notebooks/
+│   └── pipeline_alfabetizacao_colab.ipynb
 ├── sql/
-│
+│   ├── 01_descoberta_tabelas.sql
+│   ├── 02_finops_queries.sql
+│   └── 03_gold_analytical_queries.sql
 ├── src/
 │   ├── ingestion/
 │   ├── processing/
+│   ├── streaming/
 │   ├── quality/
 │   ├── monitoring/
 │   └── utils/
-│
 ├── data/
 │   ├── bronze/
-│   │   ├── batch/
-│   │   └── streaming/
 │   ├── silver/
-│   └── gold/
-│
+│   ├── gold/
+│   ├── quality/
+│   ├── monitoring/
+│   └── evidence/
 ├── logs/
-│
-├── notebooks/
-│
-└── tests/
+├── requirements.txt
+├── .gitignore
+└── README.md
 ```
 
----
+A pasta `data/` contém artefatos gerados pela execução e não deve ser versionada integralmente no GitHub.
 
-## 15. Como executar o projeto
+## 15. Como Executar
 
-A execução será feita em Google Colab.
-
-Fluxo previsto:
-
-1. abrir o notebook principal em `notebooks/`;
-2. configurar o acesso ao BigQuery Sandbox;
-3. executar a ingestão batch;
-4. gerar arquivos na camada Bronze;
-5. executar transformações para Silver;
-6. gerar datasets analíticos na Gold;
-7. executar a simulação de streaming;
-8. rodar validações de qualidade;
-9. consultar os logs e relatórios gerados.
-
-As instruções detalhadas de execução serão complementadas ao longo do desenvolvimento do projeto.
-
----
-
-## 16. Estratégia de versionamento
-
-O projeto utilizará GitHub para versionamento.
-
-Estratégia prevista:
-
-* `main`: versão final estável;
-* `develop`: branch de integração;
-* `feature/*`: branches para desenvolvimento de funcionalidades específicas.
-
-Exemplos de branches:
+1. Abrir o notebook no Google Colab:
 
 ```text
-feature/setup-project
-feature/batch-ingestion
-feature/bronze-silver-gold
-feature/streaming-simulation
-feature/data-quality
-feature/monitoring-finops
-feature/readme-documentation
+notebooks/pipeline_alfabetizacao_colab.ipynb
 ```
 
-Exemplos de commits:
+2. Executar as células em ordem.
+
+3. Autenticar no Google quando solicitado.
+
+4. Confirmar o projeto GCP:
 
 ```text
-chore: create initial project structure
-docs: add initial README documentation
-feat: add batch ingestion pipeline
-feat: implement bronze to silver transformation
-feat: create gold analytical datasets
-feat: add streaming simulation
-feat: add data quality validation scripts
-docs: add finops and monitoring sections
+fiap-techchallenge-fase2
 ```
 
----
+5. Validar a geração das camadas:
 
-## 17. Status do projeto
+```text
+data/bronze/
+data/silver/
+data/gold/
+data/quality/
+data/monitoring/
+```
 
-| Etapa                            | Status             |
-| -------------------------------- | ------------------ |
-| Estrutura inicial do repositório | Concluído          |
-| README inicial                   | Em desenvolvimento |
-| Ingestão batch                   | Pendente           |
-| Camada Bronze                    | Pendente           |
-| Camada Silver                    | Pendente           |
-| Camada Gold                      | Pendente           |
-| Streaming simulado               | Pendente           |
-| Qualidade de dados               | Pendente           |
-| Monitoramento                    | Pendente           |
-| FinOps                           | Pendente           |
-| Roteiro do vídeo                 | Pendente           |
+## 16. Decisões Arquiteturais
 
----
+| Decisão | Justificativa |
+|---|---|
+| BigQuery Sandbox | Uso real de cloud sem billing |
+| Colab | Execução gratuita e reproduzível |
+| CSV na Bronze | Simplicidade e rastreabilidade |
+| Parquet na Silver/Gold | Eficiência analítica |
+| Streaming simulado | Demonstração híbrida sem custo |
+| Micro-batches | Controle operacional e simplicidade |
+| Manifestos JSON | Rastreabilidade das execuções |
+| Docs Markdown | Facilidade de avaliação no GitHub |
 
-## 18. Conclusão
+## 17. Trade-offs
 
-Este projeto propõe uma pipeline híbrida para análise da alfabetização no Brasil, utilizando uma abordagem gratuita, reprodutível e alinhada aos conceitos modernos de engenharia de dados.
+### Vantagens
 
-A solução prioriza organização, qualidade, rastreabilidade, controle de custos e preparação da camada analítica para usos futuros em dashboards, análises estatísticas e aplicações de inteligência artificial.
+- custo zero;
+- reprodutibilidade;
+- arquitetura clara;
+- uso real de BigQuery;
+- camadas bem separadas;
+- qualidade e monitoramento;
+- documentação completa;
+- base preparada para IA.
+
+### Limitações
+
+- não usa Pub/Sub real;
+- não usa Dataflow;
+- não materializa Gold em BigQuery;
+- arquivos de dados são reproduzidos no Colab;
+- ambiente local do Colab é temporário.
+
+## 18. Evolução Futura
+
+Em um cenário produtivo, a arquitetura poderia evoluir para:
+
+- Cloud Storage para camadas Bronze/Silver/Gold;
+- BigQuery Tables para a camada Gold;
+- Pub/Sub para streaming real;
+- Dataflow para processamento em tempo real;
+- Cloud Composer para orquestração;
+- Cloud Monitoring para alertas;
+- Looker Studio para dashboards;
+- BigQuery ML ou Vertex AI para modelos preditivos.
+
+## 19. Status Final da Entrega
+
+| Etapa | Status |
+|---|---|
+| Arquitetura | Concluída |
+| Repositório | Concluído |
+| Notebook principal | Concluído |
+| Ingestão Batch | Concluída |
+| Bronze | Concluída |
+| Silver | Concluída |
+| Gold | Concluída |
+| Streaming simulado | Concluído |
+| Qualidade consolidada | Aprovada com warnings |
+| BigQuery / FinOps | Concluído |
+| Monitoramento | Aprovado com warnings |
+| Scripts Python | Concluído |
+| Documentação | Concluída |
+
+## 20. Conclusão
+
+O projeto entrega uma pipeline híbrida de dados para análise da alfabetização no Brasil, utilizando BigQuery Sandbox, Google Colab, arquitetura Medalhão, processamento Batch, Streaming simulado, validação de qualidade, monitoramento consolidado, estratégia FinOps e base analítica preparada para aplicações futuras de IA.
+
+A solução atende ao desafio acadêmico mantendo custo zero, rastreabilidade, organização técnica e potencial de evolução para ambiente produtivo.
