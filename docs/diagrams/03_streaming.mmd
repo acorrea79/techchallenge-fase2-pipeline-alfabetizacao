@@ -1,0 +1,9 @@
+flowchart LR
+    A[Producer Python] --> B[Eventos JSONL]
+    B --> C[Bronze Streaming]
+    C --> D[Consumer Micro-batch]
+    D --> E{Validação}
+    E -->|Válido| F[Silver Streaming]
+    E -->|Inválido| G[Quarentena]
+    F --> H[Gold Streaming]
+    H --> I[Monitoramento]

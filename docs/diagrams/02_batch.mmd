@@ -1,0 +1,7 @@
+flowchart LR
+    A[BigQuery Público / Base dos Dados] --> B[Consulta Batch / Python]
+    B --> C[Bronze CSV]
+    C --> D[Silver Parquet]
+    D --> E[Gold Parquet]
+    E --> F[Qualidade]
+    F --> G[Monitoramento]

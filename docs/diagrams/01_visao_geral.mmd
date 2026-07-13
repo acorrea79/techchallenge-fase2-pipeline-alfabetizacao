@@ -1,0 +1,13 @@
+flowchart TD
+    A[Base dos Dados / BigQuery Sandbox] --> B[Google Colab / Python]
+    B --> C[Bronze Batch]
+    B --> D[Bronze Streaming]
+    C --> E[Silver Batch]
+    D --> F[Silver Streaming]
+    E --> G[Gold Analytics]
+    F --> H[Gold Streaming]
+    G --> I[Qualidade Consolidada]
+    H --> I
+    I --> J[Monitoramento Consolidado]
+    J --> K[Documentação / Evidências / FinOps]
+    G --> L[Base Analítica para IA]
