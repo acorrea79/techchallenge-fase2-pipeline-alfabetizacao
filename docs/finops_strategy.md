@@ -21,7 +21,7 @@ A tabela `alunos` é a maior fonte do dataset. Para evitar leitura desnecessári
 
 Foram geradas:
 
-- `alunos_sample.csv`: amostra controlada;
+- `alunos_sample.csv`: recorte técnico não probabilístico para validação de schema e transformações;
 - `alunos_agregado.csv`: visão agregada por ano, município, rede e série.
 
 ### 2.3 Seleção explícita de colunas

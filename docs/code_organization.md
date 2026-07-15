@@ -4,7 +4,7 @@
 
 Este documento descreve a organização dos scripts Python do projeto.
 
-O notebook `notebooks/pipeline_alfabetizacao_colab.ipynb` permanece como fluxo principal de execução no Google Colab. A pasta `src/` organiza as responsabilidades da pipeline em módulos reutilizáveis.
+O notebook `notebooks/pipeline_alfabetizacao.ipynb` permanece como fluxo principal de execução no Google Colab. A pasta `src/` organiza as responsabilidades da pipeline em módulos reutilizáveis.
 
 ## Estrutura
 
