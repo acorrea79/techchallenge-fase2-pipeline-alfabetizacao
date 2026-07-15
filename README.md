@@ -878,67 +878,7 @@ A entrega possui as seguintes limitações:
 
 Essas limitações não são apresentadas como funcionalidades implementadas. Elas definem as fronteiras reais da prova de conceito.
 
----
-
-## 22. Evolução para ambiente produtivo
-
-```mermaid
-flowchart LR
-    A[BigQuery / APIs / Arquivos] --> B[Cloud Storage Bronze]
-    B --> C[Dataflow ou Dataproc]
-    C --> D[Cloud Storage Silver]
-    D --> E[BigQuery Gold]
-
-    F[Pub/Sub] --> C
-
-    E --> G[Looker Studio]
-    E --> H[BigQuery ML ou Vertex AI]
-
-    I[Cloud Composer] --> B
-    I --> C
-    I --> E
-
-    J[Cloud Monitoring] --> I
-```
-
-Possíveis evoluções:
-
-- Cloud Storage;
-- BigQuery Gold;
-- Pub/Sub;
-- Dataflow;
-- Cloud Composer;
-- Cloud Monitoring;
-- Looker Studio;
-- BigQuery ML;
-- Vertex AI;
-- testes automatizados;
-- GitHub Actions;
-- parametrização por variáveis de ambiente;
-- persistência e particionamento das camadas;
-- alertas automáticos.
-
----
-
-## 23. Vídeo executivo
-
-**Status: em produção.**
-
-O vídeo executivo terá duração máxima de cinco minutos e apresentará:
-
-- problema de negócio;
-- arquitetura da solução;
-- Pipeline Batch;
-- Streaming simulado;
-- qualidade;
-- monitoramento;
-- FinOps;
-- valor da camada Gold;
-- aplicação futura em IA.
-
----
-
-## 24. Status da entrega
+## 22. Status da entrega
 
 | Item | Status |
 |---|---|
@@ -960,11 +900,10 @@ O vídeo executivo terá duração máxima de cinco minutos e apresentará:
 | Versionamento por commits | Implementado |
 | Branch de revisão final | Criada |
 | Pull Request final | Realizada ao concluir a revisão |
-| Vídeo executivo | Em produção |
 
 ---
 
-## 25. Conclusão
+## 23. Conclusão
 
 O projeto entrega uma pipeline híbrida funcional para análise da alfabetização no Brasil.
 
