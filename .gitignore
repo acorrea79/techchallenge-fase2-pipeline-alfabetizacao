@@ -1,7 +1,6 @@
 # Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
 *.pyd
 .venv/
 venv/
@@ -10,36 +9,28 @@ env/
 # Jupyter
 .ipynb_checkpoints/
 
-# Logs
+# Logs gerados
 *.log
-
-# Dados grandes
-data/**/*.csv
-data/**/*.parquet
-data/**/*.jsonl
-data/**/*.xlsx
-
-# Manter estrutura das pastas
-!data/**/.gitkeep
+logs/**
+!logs/
 !logs/.gitkeep
+
+# Dados e evidências gerados durante a execução
+data/**
+!data/
+!data/**/
+!data/**/.gitkeep
+
+# Credenciais e configurações locais
+.env
+.env.*
+!.env.example
+credentials/
+secrets/
+client_secret*.json
+service_account*.json
+*-credentials.json
 
 # Sistema operacional
 .DS_Store
 Thumbs.db
-
-# Credenciais
-*.json
-.env
-
-# Dados e evidências gerados em execução
-data/**/*.csv
-data/**/*.parquet
-data/**/*.jsonl
-data/**/*.json
-data/evidence/
-data/quality/
-data/monitoring/
-
-# Logs
-*.log
-logs/*.log

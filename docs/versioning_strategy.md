@@ -1,179 +1,130 @@
-# Estratégia de Versionamento e Pull Requests
+# Estratégia de Versionamento
 
-## 1. Objetivo
+## 1. Contexto
 
-Este documento descreve a estratégia de versionamento utilizada no projeto **TechChallenge Fase 2 — Pipeline Híbrido para Análise da Alfabetização no Brasil**.
+O projeto foi desenvolvido individualmente por Andre Correa Luis Vilas Boas.
 
-O objetivo é demonstrar organização do desenvolvimento, rastreabilidade das alterações e uso de boas práticas com Git e GitHub.
+O controle de versão foi realizado com Git e GitHub, utilizando commits incrementais para registrar a evolução da pipeline.
 
-## 2. Repositório
+Por não haver outros integrantes, não existiu um fluxo contínuo de colaboração, revisão entre pares ou divisão de funcionalidades entre membros da equipe.
 
-Repositório do projeto:
+## 2. Versionamento efetivamente utilizado
+
+Durante o desenvolvimento foram utilizados:
+
+- repositório Git;
+- hospedagem no GitHub;
+- branch principal `main`;
+- commits incrementais;
+- mensagens de commit relacionadas às etapas implementadas;
+- histórico de evolução da solução.
+
+Os commits registram atividades como:
+
+- criação da estrutura do projeto;
+- ingestão Batch;
+- transformação Bronze, Silver e Gold;
+- Streaming simulado;
+- qualidade de dados;
+- monitoramento;
+- FinOps;
+- documentação;
+- correções finais.
+
+## 3. Branches e Pull Requests
+
+Durante a maior parte do projeto, o desenvolvimento ocorreu diretamente na branch `main`.
+
+Essa decisão esteve relacionada ao caráter individual do trabalho e à ausência de outros colaboradores.
+
+Mesmo em projetos individuais, branches e Pull Requests podem ser utilizadas para:
+
+- isolar alterações;
+- revisar diferenças antes do merge;
+- registrar decisões;
+- reduzir riscos sobre a branch principal;
+- documentar uma etapa de correção.
+
+Na revisão final foi criada a branch:
 
 ```text
-https://github.com/acorrea79/techchallenge-fase2-pipeline-alfabetizacao
+fix/final-hardening
 ```
 
-## 3. Estratégia de branches
+Essa branch concentra correções reais identificadas durante a auditoria final, incluindo:
 
-A branch principal do projeto é:
+- revisão da documentação;
+- correção de inconsistências;
+- limpeza de arquivos;
+- atualização do README;
+- fortalecimento da reprodutibilidade;
+- adequação da entrega ao projeto efetivamente implementado.
+
+Após as validações, a branch deverá ser integrada à `main` por meio de uma Pull Request de auto-revisão.
+
+## 4. Pull Request de revisão final
+
+A Pull Request final deverá registrar:
+
+- objetivo da revisão;
+- problemas encontrados;
+- arquivos modificados;
+- correções realizadas;
+- verificações executadas;
+- limitações conhecidas;
+- resultado final.
+
+A Pull Request não representa uma revisão por outro integrante. Ela funciona como evidência de controle de mudança e autoauditoria em um projeto individual.
+
+## 5. Padrão de commits
+
+O projeto utiliza mensagens curtas e descritivas, com prefixos como:
 
 ```text
-main
+feat:
+fix:
+docs:
 ```
 
-Durante o desenvolvimento, as alterações foram organizadas por etapas funcionais da pipeline.
-
-Para evidenciar boas práticas de versionamento, recomenda-se manter branches de consolidação, como:
+Exemplos:
 
 ```text
-feature/code-organization
-feature/final-documentation
-feature/final-review
+feat: implementa transformação da camada gold
+fix: corrige validações de qualidade
+docs: atualiza documentação final
 ```
 
-## 4. Padrão de commits
+Esse padrão facilita a leitura do histórico e a identificação do tipo de alteração realizada.
 
-Os commits seguem uma estrutura simples baseada no tipo de alteração:
+## 6. Situação do versionamento
 
-| Prefixo | Uso |
+| Item | Situação |
 |---|---|
-| `chore:` | Organização inicial, estrutura de pastas, ajustes de configuração |
-| `docs:` | Documentação, README, diagramas e evidências |
-| `feat:` | Novas funcionalidades da pipeline |
-| `fix:` | Correções de código, validações ou ajustes de execução |
-| `refactor:` | Reorganização de código sem alterar comportamento |
-| `test:` | Testes e validações |
+| Repositório Git | Implementado |
+| Repositório GitHub | Implementado |
+| Histórico de commits | Implementado |
+| Commits incrementais | Implementado |
+| Desenvolvimento individual | Sim |
+| Uso predominante da branch `main` | Sim |
+| Branch de revisão final | Criada |
+| Pull Request de revisão final | Pendente até a conclusão das correções |
+| Revisão por outro integrante | Não se aplica |
 
-Exemplos de commits utilizados ou recomendados:
+## 7. Limitações
 
-```text
-chore: create initial project structure
-docs: add initial README documentation
-feat: add batch ingestion layer
-feat: add silver transformation layer
-feat: add gold analytical layer
-feat: add simulated streaming pipeline
-feat: add consolidated data quality checks
-docs: add cloud bigquery and finops documentation
-feat: add consolidated monitoring
-feat: add modular source code structure
-docs: update final readme and architecture documentation
-docs: add final architecture diagrams
-```
+O projeto não utilizou, durante todo o ciclo de desenvolvimento:
 
-## 5. Pull Requests recomendados
+- branches separadas para cada funcionalidade;
+- revisão por pares;
+- múltiplos colaboradores;
+- Pull Requests em todas as etapas;
+- integração contínua;
+- proteção automática da branch `main`.
 
-Mesmo que parte do desenvolvimento tenha sido feita de forma incremental, recomenda-se registrar Pull Requests finais de consolidação para evidenciar o fluxo de revisão.
-
-### PR 1 — Organização do código
-
-Branch sugerida:
-
-```text
-feature/code-organization
-```
-
-Título sugerido:
-
-```text
-feat: add modular source code structure
-```
-
-Escopo:
-
-- criação da pasta `src/`;
-- organização dos scripts por responsabilidade;
-- documentação da organização do código.
-
-Arquivos principais:
-
-```text
-src/
-docs/code_organization.md
-```
-
-### PR 2 — Documentação final
-
-Branch sugerida:
-
-```text
-feature/final-documentation
-```
-
-Título sugerido:
-
-```text
-docs: finalize project documentation
-```
-
-Escopo:
-
-- atualização final do README;
-- documentação da arquitetura;
-- diagramas finais;
-- documentação de FinOps;
-- documentação de monitoramento;
-- evidências de uso do BigQuery Sandbox.
-
-Arquivos principais:
-
-```text
-README.md
-docs/
-sql/
-```
-
-### PR 3 — Revisão final
-
-Branch sugerida:
-
-```text
-feature/final-review
-```
-
-Título sugerido:
-
-```text
-docs: add final delivery review
-```
-
-Escopo:
-
-- checklist de entrega;
-- ajustes finais de documentação;
-- organização dos artefatos finais.
-
-## 6. Critérios de revisão dos PRs
-
-Cada Pull Request deve observar:
-
-- se os arquivos esperados foram criados;
-- se a documentação está coerente com a execução do notebook;
-- se os dados gerados não foram versionados indevidamente;
-- se o README explica claramente a arquitetura;
-- se Batch e Streaming estão descritos;
-- se Qualidade, Monitoramento e FinOps estão documentados;
-- se a estrutura do projeto está fácil de navegar.
-
-## 7. Observação sobre dados gerados
-
-Os arquivos gerados nas pastas abaixo são reproduzíveis e não devem ser versionados integralmente:
-
-```text
-data/bronze/
-data/silver/
-data/gold/
-data/quality/
-data/monitoring/
-data/evidence/
-logs/
-```
-
-A existência dessas pastas e seus fluxos é demonstrada pelo notebook, pelos manifestos e pela documentação.
+Esses itens podem ser adotados em uma evolução futura ou em um contexto de equipe.
 
 ## 8. Conclusão
 
-A estratégia de versionamento adotada busca demonstrar evolução incremental, organização técnica e rastreabilidade da entrega.
+O projeto possui versionamento real e verificável por meio do histórico de commits no GitHub.
 
-O uso de commits semânticos, branches e Pull Requests facilita a avaliação do projeto e aproxima a entrega de uma prática profissional de engenharia de dados.
+A estratégia adotada refletiu o desenvolvimento individual. A branch e a Pull Request de revisão final complementam esse histórico, criando uma etapa explícita de validação antes da integração definitiva à branch principa

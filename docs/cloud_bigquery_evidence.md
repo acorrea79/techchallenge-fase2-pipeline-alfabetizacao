@@ -38,14 +38,14 @@ O BigQuery foi utilizado para:
 - validar estrutura das entidades obrigatórias;
 - estimar volume das tabelas;
 - executar consultas de ingestão batch;
-- gerar amostra controlada da tabela `alunos`;
+- gerar um recorte técnico não probabilístico da tabela `alunos` para validação de schema e transformações;
 - gerar visão agregada da tabela `alunos`.
 
 ## 5. Estratégia adotada
 
 A tabela `alunos` possui maior volume. Por isso, foram adotadas duas estratégias:
 
-1. amostra controlada de 100.000 linhas;
+1. recorte técnico de até 100.000 linhas, obtido com `LIMIT`, sem garantia de representatividade estatística;
 2. agregação por ano, município, rede e série.
 
 Essa decisão reduz custo, evita processamento desnecessário e mantém informação suficiente para análise educacional.
